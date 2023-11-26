@@ -236,6 +236,36 @@ app.post('/api/login', async (req, res) => {
 })
 
 // app.delete('/api/cars')
+app.delete('/api/cars/:carId', async (req, res) => {
+	const { carId } = req.params
+	console.log(carId)
+	if (!Number.isInteger(parseInt(carId))) {
+		return res.status(400).send({ error: 'Invalid carId' })
+	}
+
+	const client = await startConnection()
+
+	const query = `DELETE FROM Car WHERE car_id = $1;`
+
+	const values = [carId]
+
+	try {
+		const response = await client
+			.query(query, values)
+			.then(response => response.rows[0])
+
+		if (response) {
+			res.send(response)
+		} else {
+			res.status(404).send({ error: 'Car not found' })
+		}
+	} catch (error) {
+		console.error('Error:', error)
+		res.status(500).send({ error: 'Internal Server Error' })
+	} finally {
+		client.release()
+	}
+})
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`)

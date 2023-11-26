@@ -1,11 +1,11 @@
 ﻿import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 
 function CarDetails() {
 	const { carId } = useParams()
 	const [carDetails, setCarDetails] = useState(null)
-	let currency;
+	let currency
 
 	useEffect(() => {
 		const fetchCarDetails = async () => {
@@ -26,24 +26,32 @@ function CarDetails() {
 		return <div>Loading...</div>
 	}
 
-	console.log(carDetails.currency);
+	console.log(carDetails.currency)
 
 	switch (carDetails.currency) {
 		case 'RUB': {
 			currency = <p>Стоимость: {carDetails.price}&#8381;</p>
-			break;
+			break
 		}
 		case 'USD': {
 			currency = <p>Стоимость: {carDetails.price}&#36;</p>
-			break;
+			break
 		}
 		case 'EUR': {
 			currency = <p>Стоимость: {carDetails.price}&#8364;</p>
-			break;
+			break
 		}
 		case 'BYN': {
 			currency = <p>Стоимость: {carDetails.price}BYN</p>
-			break;
+			break
+		}
+	}
+
+	async function handleDeleteCar() {
+		try {
+			await axios.delete(`http://localhost:4000/api/cars/${carId}`)
+		} catch (error) {
+			console.error('Error:', error)
 		}
 	}
 
@@ -68,6 +76,9 @@ function CarDetails() {
 			<p>Расход по городу: {carDetails.city_fuel_consumption}л</p>
 			<p>Топливо: {carDetails.fuel_type}</p>
 			<p>Комплектация: {carDetails.equipment_type}</p>
+			<Link to='/'>
+				<button onClick={handleDeleteCar}>Удалить машину</button>
+			</Link>
 		</div>
 	)
 }
