@@ -3,6 +3,8 @@ import bodyParser from 'body-parser'
 import pkg from 'pg'
 import cors from 'cors'
 import startConnection from './DataAccess/startConnection.js'
+import jwt from 'jsonwebtoken'
+
 const { Pool } = pkg
 
 const app = express()
@@ -123,7 +125,7 @@ app.post('/api/cars', async (req, res) => {
 		name,
 	} = req.body
 
-	console.log(req.body);
+	console.log(req.body)
 	const client = await startConnection()
 
 	const query = `INSERT INTO Car (engine_capacity, cylinder_count, engine_power, torque, max_speed, acceleration_time, production_date, price, currency_id, length, width, height, track_fuel_consumption, city_fuel_consumption, gear_type_id, fuel_type_id, body_type_id, car_brand_id, equipment_type_id, name) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)`
@@ -150,7 +152,7 @@ app.post('/api/cars', async (req, res) => {
 		name,
 	]
 
-	console.log(values);
+	console.log(values)
 
 	try {
 		const response = await client
@@ -214,7 +216,7 @@ app.post('/api/login', async (req, res) => {
 	const client = await startConnection()
 
 	const query = `SELECT * FROM Users WHERE login = $1 AND password = $2`
-	const values = [req.body['login'], req.body['password']]
+	const values = [login, password]
 
 	console.log(values)
 	try {
@@ -223,7 +225,17 @@ app.post('/api/login', async (req, res) => {
 			.then(response => response.rows)
 
 		if (response.length > 0) {
-			res.json({ success: true, message: 'Вход выполнен успешно' })
+			const token = jwt.sign(
+				{
+					userId: response[0].user_id,
+					user_name: response[0].user_name,
+					user_type: response[0].user_type,
+				},
+				'your_secret_key',
+				{ expiresIn: '1h' }
+			)
+
+			res.json({ success: true, message: 'Вход выполнен успешно', token })
 		} else {
 			res.status(401).json({
 				success: false,
@@ -235,7 +247,22 @@ app.post('/api/login', async (req, res) => {
 	}
 })
 
-// app.delete('/api/cars')
+//Проверка токена
+app.post('/api/validateToken', async (req, res) => {
+	const { token } = req.body
+
+	try {
+		const decoded = jwt.verify(token, 'your_secret_key')
+		console.log(decoded)
+
+		res.json({ user: decoded })
+	} catch (error) {
+		console.error('Ошибка при проверке токена:', error)
+		res.status(401).send('Invalid token')
+	}
+})
+
+//Удаление машины
 app.delete('/api/cars/:carId', async (req, res) => {
 	const { carId } = req.params
 	console.log(carId)

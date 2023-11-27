@@ -1,10 +1,11 @@
 ﻿import React, { useState } from 'react'
 import './RegisterPage.css'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 function RegisterPage() {
 	const [users, setUsers] = useState('')
-const [errorMessage, setErrorMessage] = useState('')
+	const [errorMessage, setErrorMessage] = useState('')
 
 	async function checkExistingLogin(login) {
 		try {
@@ -19,7 +20,7 @@ const [errorMessage, setErrorMessage] = useState('')
 	}
 
 	async function handleRegistration(event) {
-		event.preventDefault();
+		event.preventDefault()
 		try {
 			const isExistingLogin = await checkExistingLogin(users.login)
 
@@ -27,8 +28,8 @@ const [errorMessage, setErrorMessage] = useState('')
 				setErrorMessage('Логин уже существует')
 				return
 			}
-			setErrorMessage('');
-			await axios.post('http://localhost:4000/api/users', users);
+			setErrorMessage('')
+			await axios.post('http://localhost:4000/api/users', users)
 		} catch (error) {
 			console.error('Error:', error)
 		}
@@ -99,9 +100,14 @@ const [errorMessage, setErrorMessage] = useState('')
 							<label htmlFor='notLegalEntity'>Нет</label>
 						</div>
 					</div>
-					<button onClick={handleRegistration} className='btn-register'>
-						Зарегистрироваться
-					</button>
+					<div className='buttons'>
+						<button onClick={handleRegistration} className='btn-register'>
+							Зарегистрироваться
+						</button>
+						<Link to='/login'>
+							<div className='account'>Уже есть аккаунт</div>
+						</Link>
+					</div>
 				</form>
 			</div>
 		</div>

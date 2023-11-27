@@ -2,8 +2,9 @@
 import './CarCatalog.css'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../AuthContext'
 
-function CarCatalog() {
+function AdminCarCatalog() {
 	const [cars, setCars] = useState([])
 	const [newCar, setNewCar] = useState({
 		car_brand_id: 1,
@@ -13,6 +14,7 @@ function CarCatalog() {
 		equipment_type_id: 1,
 		currency_id: 1,
 	})
+	const { loggedInUser } = useAuth()
 
 	const [filledFields, setFilledFields] = useState({
 		name: false,
@@ -41,8 +43,8 @@ function CarCatalog() {
 
 	async function handleAddCar() {
 		try {
-			await axios.post('http://localhost:4000/api/cars', newCar);
-			getCars();
+			await axios.post('http://localhost:4000/api/cars', newCar)
+			getCars()
 			// setCars(prevCars => [...prevCars, newCar])
 		} catch (error) {
 			console.error('Error:', error)
@@ -282,4 +284,4 @@ function CarCatalog() {
 	)
 }
 
-export default CarCatalog
+export default AdminCarCatalog

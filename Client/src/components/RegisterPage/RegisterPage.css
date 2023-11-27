@@ -51,3 +51,9 @@ input {
 .btn-register:active {
     background-color: #003a6e;
 }
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

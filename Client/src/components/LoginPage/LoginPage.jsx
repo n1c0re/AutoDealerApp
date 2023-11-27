@@ -1,14 +1,16 @@
 ﻿import React, { useState } from 'react'
 import './LoginPage.css'
 import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Login() {
 	const [login, setlogin] = useState('')
 	const [password, setPassword] = useState('')
-const [errorMessage, setErrorMessage] = useState('')
+	const [errorMessage, setErrorMessage] = useState('')
+	const navigate = useNavigate()
 
-	const handleLogin = async (event) => {
-		event.preventDefault();
+	const handleLogin = async event => {
+		event.preventDefault()
 		try {
 			const response = await axios.post('http://localhost:4000/api/login', {
 				login,
@@ -17,12 +19,13 @@ const [errorMessage, setErrorMessage] = useState('')
 
 			console.log('Login successful:', response.data)
 			setErrorMessage('')
-			// Возможно, здесь нужно выполнить дополнительные действия после успешного входа.
+			sessionStorage.setItem('token', response.data.token)
+			navigate('/dashboard')
 		} catch (error) {
 			console.error('Login error:', error.response.data)
 			setErrorMessage('Проверьте логин или пароль')
-			// Возможно, здесь нужно обработать ошибку, например, отобразить сообщение об ошибке на форме.
 		}
+		location.reload();
 	}
 
 	return (
@@ -51,9 +54,17 @@ const [errorMessage, setErrorMessage] = useState('')
 						/>
 					</div>
 					{errorMessage && <p>{errorMessage}</p>}
-					<button onClick={handleLogin} className='btn-login'>
-						Войти
-					</button>
+
+					<div className='buttons'>
+						<button onClick={handleLogin} className='btn-login'>
+							Войти
+						</button>
+						<Link to='/'>
+							<div className='account'>
+								Нет аккаунта? <br></br>Зарегистрироваться
+							</div>
+						</Link>
+					</div>
 				</form>
 			</div>
 		</div>

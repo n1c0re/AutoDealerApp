@@ -76,7 +76,7 @@ function CarDetails() {
 			<p>Расход по городу: {carDetails.city_fuel_consumption}л</p>
 			<p>Топливо: {carDetails.fuel_type}</p>
 			<p>Комплектация: {carDetails.equipment_type}</p>
-			<Link to='/'>
+			<Link to='/dashboard'>
 				<button onClick={handleDeleteCar}>Удалить машину</button>
 			</Link>
 		</div>
