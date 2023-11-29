@@ -6,7 +6,7 @@ import registerRouter from './routes/register.js'
 import checkLogin from './routes/checkLogin.js'
 import loginRouter from './routes/login.js'
 import tokenRouter from './routes/tokenValidate.js'
-import orderRouter from './routes/order.js'
+import {orderRouter} from './routes/order.js'
 import clientOrderRouter from './routes/clientOrder.js'
 
 const app = express()
@@ -23,9 +23,8 @@ app.use('/api/users', registerRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/validateToken', tokenRouter)
 
-app.use('/api/zakaz', orderRouter)
+app.use('/api/orders', orderRouter)
 app.use('/api/clientZakaz', clientOrderRouter)
-
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`)

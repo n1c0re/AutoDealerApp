@@ -12,7 +12,7 @@ function CarDetails() {
 	async function handleOrder() {
 		try {
 			const zakazResponse = await axios.post(
-				`http://localhost:4000/api/zakaz`,
+				`http://localhost:4000/api/orders`,
 				{
 					seller_id: 1,
 					zakaz_date: new Date(),
@@ -26,6 +26,11 @@ function CarDetails() {
 			
 			await axios.post(`http://localhost:4000/api/clientZakaz`, {
 				client_id: loggedInUser.client_id,
+				zakaz_id: createdZakazId,
+			})
+
+			await axios.post(`http://localhost:4000/api/orders/car`, {
+				car_id: carId,
 				zakaz_id: createdZakazId,
 			})
 

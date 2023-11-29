@@ -23,23 +23,22 @@ const AuthProvider = ({ children }) => {
 	const logout = () => {
 		setLoggedInUser(null)
 	}
-	const f1 = async () => {
+	const fetchUser = async () => {
 		const token = sessionStorage.getItem('token')
 		if (token) {
 			const user = await checkTokenValidity(token)
-			console.log(user)
 			if (user) {
 				await setLoggedInUser(user)
-				console.log(loggedInUser)
 			} else {
 				localStorage.removeItem('token')
 				sessionStorage.removeItem('token')
 			}
+			console.log(user)
 		}
 	}
-
+	
 	useEffect(() => {
-		f1()
+		fetchUser()
 	}, [])
 
 	return (

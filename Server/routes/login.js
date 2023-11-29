@@ -39,6 +39,17 @@ loginRouter.post('/', async (req, res) => {
 				if (clientResponse.length > 0) {
 					userData.client_id = clientResponse[0].client_id
 				}
+			} else if (userData.user_type === 'Продавец') {
+				const clientQuery = `SELECT seller_id FROM seller WHERE user_id = $1`
+				const clientValues = [userData.userId]
+
+				const sellerResponse = await client
+					.query(clientQuery, clientValues)
+					.then(response => response.rows)
+
+				if (sellerResponse.length > 0) {
+					userData.seller_id = sellerResponse[0].seller_id
+				}
 			}
 
 			const token = jwt.sign(userData, 'your_secret_key', {

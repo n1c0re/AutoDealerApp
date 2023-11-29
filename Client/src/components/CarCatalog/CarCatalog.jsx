@@ -25,8 +25,6 @@ function CarCatalog() {
 		getCars()
 	}, [])
 
-	console.log(cars)
-
 	return (
 		<div className='car-catalog'>
 			{cars.map(car => (
