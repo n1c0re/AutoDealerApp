@@ -1,11 +1,13 @@
 ﻿import React, { useState } from 'react'
 import './RegisterPage.css'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function RegisterPage() {
 	const [users, setUsers] = useState('')
 	const [errorMessage, setErrorMessage] = useState('')
+
+	const navigate = useNavigate();
 
 	async function checkExistingLogin(login) {
 		try {
@@ -30,6 +32,7 @@ function RegisterPage() {
 			}
 			setErrorMessage('')
 			await axios.post('http://localhost:4000/api/users', users)
+			navigate('/');
 		} catch (error) {
 			console.error('Error:', error)
 		}
@@ -104,7 +107,7 @@ function RegisterPage() {
 						<button onClick={handleRegistration} className='btn-register'>
 							Зарегистрироваться
 						</button>
-						<Link to='/login'>
+						<Link to='/'>
 							<div className='account'>Уже есть аккаунт</div>
 						</Link>
 					</div>

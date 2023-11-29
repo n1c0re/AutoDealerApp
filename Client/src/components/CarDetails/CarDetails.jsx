@@ -1,48 +1,74 @@
-﻿import React, { useEffect, useState } from 'react'
+﻿import React, { useEffect, useState, useContext } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
+import { AuthContext } from '../../AuthContext'
 
 function CarDetails() {
 	const { carId } = useParams()
-	const [carDetails, setCarDetails] = useState(null)
+	const [carData, setcarData] = useState(null)
 	let currency
+	const { loggedInUser } = useContext(AuthContext)
+
+	async function handleOrder() {
+		try {
+			const zakazResponse = await axios.post(
+				`http://localhost:4000/api/zakaz`,
+				{
+					seller_id: 1,
+					zakaz_date: new Date(),
+					zakaz_status: 'В обработке',
+				}
+			)
+
+			const createdZakazId = zakazResponse.data.zakaz_id
+
+			console.log(createdZakazId);
+			
+			await axios.post(`http://localhost:4000/api/clientZakaz`, {
+				client_id: loggedInUser.client_id,
+				zakaz_id: createdZakazId,
+			})
+
+		} catch (error) {
+			console.error('Error:', error)
+		}
+	}
 
 	useEffect(() => {
-		const fetchCarDetails = async () => {
-			try {
-				const response = await axios.get(
-					`http://localhost:4000/api/cars/${carId}`
-				)
-				setCarDetails(response.data)
-			} catch (error) {
-				console.error('Error:', error)
-			}
-		}
-
-		fetchCarDetails()
+		getcarData()
 	}, [carId])
 
-	if (!carDetails) {
+	const getcarData = async () => {
+		try {
+			const response = await axios.get(
+				`http://localhost:4000/api/cars/${carId}`
+			)
+			setcarData(response.data)
+		} catch (error) {
+			console.error('Error:', error)
+		}
+	}
+	if (!carData) {
 		return <div>Loading...</div>
 	}
 
-	console.log(carDetails.currency)
+	console.log(carData.currency)
 
-	switch (carDetails.currency) {
+	switch (carData.currency) {
 		case 'RUB': {
-			currency = <p>Стоимость: {carDetails.price}&#8381;</p>
+			currency = <p>Стоимость: {carData.price}&#8381;</p>
 			break
 		}
 		case 'USD': {
-			currency = <p>Стоимость: {carDetails.price}&#36;</p>
+			currency = <p>Стоимость: {carData.price}&#36;</p>
 			break
 		}
 		case 'EUR': {
-			currency = <p>Стоимость: {carDetails.price}&#8364;</p>
+			currency = <p>Стоимость: {carData.price}&#8364;</p>
 			break
 		}
 		case 'BYN': {
-			currency = <p>Стоимость: {carDetails.price}BYN</p>
+			currency = <p>Стоимость: {carData.price}BYN</p>
 			break
 		}
 	}
@@ -57,28 +83,32 @@ function CarDetails() {
 
 	return (
 		<div>
-			<h2>{carDetails.name}</h2>
-			<p>Производитель: {carDetails.carbrand}</p>
+			<h2>{carData.name}</h2>
+			<p>Производитель: {carData.carbrand}</p>
 			{currency}
-			<p>Тип кузова: {carDetails.body_type}</p>
-			<p>Коробка передач: {carDetails.gear_type}</p>
-			<p>Объем двигателя: {carDetails.engine_capacity}л</p>
-			<p>Количество цилиндров: {carDetails.cylinder_count}</p>
-			<p>Мощность двигателя: {carDetails.engine_power}</p>
-			<p>Крутящий момент: {carDetails.torque}</p>
-			<p>Максимальная скорость: {carDetails.max_speed}</p>
-			<p>Время разгона(0-100 км/ч): {carDetails.acceleration_time}</p>
-			<p>Дата производства: {carDetails.production_date}</p>
-			<p>Длина: {carDetails.length}м</p>
-			<p>Ширина: {carDetails.width}м</p>
-			<p>Высота: {carDetails.height}м</p>
-			<p>Расход по трассе: {carDetails.track_fuel_consumption}л</p>
-			<p>Расход по городу: {carDetails.city_fuel_consumption}л</p>
-			<p>Топливо: {carDetails.fuel_type}</p>
-			<p>Комплектация: {carDetails.equipment_type}</p>
-			<Link to='/dashboard'>
-				<button onClick={handleDeleteCar}>Удалить машину</button>
-			</Link>
+			<p>Тип кузова: {carData.body_type}</p>
+			<p>Коробка передач: {carData.gear_type}</p>
+			<p>Объем двигателя: {carData.engine_capacity}л</p>
+			<p>Количество цилиндров: {carData.cylinder_count}</p>
+			<p>Мощность двигателя: {carData.engine_power}</p>
+			<p>Крутящий момент: {carData.torque}</p>
+			<p>Максимальная скорость: {carData.max_speed}</p>
+			<p>Время разгона(0-100 км/ч): {carData.acceleration_time}</p>
+			<p>Дата производства: {carData.production_date}</p>
+			<p>Длина: {carData.length}м</p>
+			<p>Ширина: {carData.width}м</p>
+			<p>Высота: {carData.height}м</p>
+			<p>Расход по трассе: {carData.track_fuel_consumption}л</p>
+			<p>Расход по городу: {carData.city_fuel_consumption}л</p>
+			<p>Топливо: {carData.fuel_type}</p>
+			<p>Комплектация: {carData.equipment_type}</p>
+			{loggedInUser.user_type == 'Админ' ? (
+				<Link to='/dashboard'>
+					<button onClick={handleDeleteCar}>Удалить машину</button>
+				</Link>
+			) : (
+				<button onClick={handleOrder}>Заказать</button>
+			)}
 		</div>
 	)
 }

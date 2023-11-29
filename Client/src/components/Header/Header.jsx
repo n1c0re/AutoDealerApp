@@ -5,13 +5,22 @@ import { AuthContext } from '../../AuthContext'
 
 function Header() {
 	const navigate = useNavigate()
-	const { logout } = useContext(AuthContext)
+	const { logout, loggedInUser } = useContext(AuthContext)
 
 	const handleLogout = () => {
 		sessionStorage.removeItem('token')
 		logout();
 		navigate('/')
 	}
+
+	const handleAdmin = () => {
+		navigate('/admin')
+	}
+
+	const handleCabinet = () => {
+		navigate('/cabinet')
+	}
+
 	return (
 		<header>
 			<Link to='/dashboard'>
@@ -19,6 +28,11 @@ function Header() {
 			</Link>
 			<h1>Дилер по продаже автомобилей</h1>
 			<div className='auth-buttons'>
+				{loggedInUser.user_type == 'Админ' ? (
+					<button onClick={handleAdmin}>Админ панель</button>
+				) : (
+					<button onClick={handleCabinet}>Личный кабинет</button>
+				)}
 				<button onClick={handleLogout}>Выйти</button>
 			</div>
 		</header>

@@ -59,7 +59,7 @@ function Login() {
 						<button onClick={handleLogin} className='btn-login'>
 							Войти
 						</button>
-						<Link to='/'>
+						<Link to='/register'>
 							<div className='account'>
 								Нет аккаунта? <br></br>Зарегистрироваться
 							</div>

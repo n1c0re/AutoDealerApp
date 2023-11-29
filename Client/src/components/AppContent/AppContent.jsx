@@ -4,10 +4,10 @@ import { AuthContext } from '../../AuthContext'
 import LoginPage from '../LoginPage/LoginPage'
 import RegisterPage from '../RegisterPage/RegisterPage'
 import Header from '../Header/Header'
-import UserCarCatalog from '../CarCatalog/UserCarCatalog'
-import AdminCarCatalog from '../CarCatalog/AdminCarCatalog'
 import CarDetails from '../CarDetails/CarDetails'
 import NotFoundPage from '../NotFoundPage/NotFoundPage'
+import AdminPanel from '../AdminPanel/AdminPanel'
+import CarCatalog from '../CarCatalog/CarCatalog'
 
 function AppContent() {
 	const { loggedInUser } = useContext(AuthContext)
@@ -30,7 +30,7 @@ function AppContent() {
 								/>
 								<Route path='/' element={<Navigate to='/dashboard' />} />
 								<Route path='/car/:carId' element={<CarDetails />} />
-								<Route path='/dashboard' element={<UserCarCatalog />} />
+								<Route path='/dashboard' element={<CarCatalog />} />
 								<Route path='*' element={<NotFoundPage />} />
 							</Routes>
 						</div>
@@ -44,6 +44,7 @@ function AppContent() {
 						<Routes>
 							<Route path='/car/:carId' element={<Header />} />
 							<Route path='/dashboard' element={<Header />} />
+							<Route path='/admin' element={<Header />} />
 						</Routes>
 						<div className='content'>
 							<Routes>
@@ -53,8 +54,9 @@ function AppContent() {
 								/>
 								<Route path='/' element={<Navigate to='/dashboard' />} />
 								<Route path='/car/:carId' element={<CarDetails />} />
-								<Route path='/dashboard' element={<AdminCarCatalog />} />
+								<Route path='/dashboard' element={<CarCatalog />} />
 								<Route path='*' element={<NotFoundPage />} />
+								<Route path='/admin' element={<AdminPanel />} />
 							</Routes>
 						</div>
 					</div>
