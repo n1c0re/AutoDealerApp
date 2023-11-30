@@ -1,9 +1,23 @@
 ﻿import React, { useState } from 'react'
 import axios from 'axios'
 import './AdminPanel.css'
+import AddCarModal from '../AddCarModal/AddCarModal'
+import OrdersModal from '../OrdersModal/OrdersModal'
+import LegalEntityModal from '../LegalEntityModal/LegalEntityMOdal'
+import CarOrdersModal from '../CarOrdersModal/CarOrdersModal'
+import TopCarsModal from '../TopCarsModal/TopCarsModal'
+import AverageModal from '../AverageModal/AverageModal'
+import ClientsModal from '../ClientsModal/ClientsModal'
 
 function AdminPanel() {
-	const [showModal, setShowModal] = useState(false)
+	const [showAddCarModal, setShowAddCarModal] = useState(false)
+	const [showOrdersModal, setShowOrdersModal] = useState(false)
+	const [showLegalEntityModal, setShowLegalEntityModal] = useState(false)
+	const [showCarOrdersModal, setShowCarOrdersModal] = useState(false)
+	const [showTopCarsModal, setShowTopCarsModal] = useState(false)
+	const [showAverageModal, setShowAverageModal] = useState(false)
+	const [showClientsModal, setShowClientsModal] = useState(false)
+
 	const [newCar, setNewCar] = useState({
 		car_brand_id: 1,
 		body_type_id: 1,
@@ -36,8 +50,74 @@ function AdminPanel() {
 		equipment_type_id: false,
 	})
 
-	const toggleModal = () => {
-		setShowModal(!showModal)
+	const toggleAddCarModal = () => {
+		setShowAddCarModal(!showAddCarModal)
+		setShowOrdersModal(false)
+		setShowLegalEntityModal(false)
+		setShowCarOrdersModal(false)
+		setShowTopCarsModal(false)
+		setShowAverageModal(false)
+		setShowClientsModal(false)
+	}
+
+	const toggleOrdersModal = () => {
+		setShowAddCarModal(false)
+		setShowOrdersModal(!showOrdersModal)
+		setShowLegalEntityModal(false)
+		setShowCarOrdersModal(false)
+		setShowTopCarsModal(false)
+		setShowAverageModal(false)
+		setShowClientsModal(false)
+	}
+
+	const toggleLegalEntityModal = () => {
+		setShowAddCarModal(false)
+		setShowOrdersModal(false)
+		setShowLegalEntityModal(!showLegalEntityModal)
+		setShowCarOrdersModal(false)
+		setShowTopCarsModal(false)
+		setShowAverageModal(false)
+		setShowClientsModal(false)
+	}
+
+	const toggleCarOrdersModal = () => {
+		setShowAddCarModal(false)
+		setShowOrdersModal(false)
+		setShowLegalEntityModal(false)
+		setShowCarOrdersModal(!showCarOrdersModal)
+		setShowTopCarsModal(false)
+		setShowAverageModal(false)
+		setShowClientsModal(false)
+	}
+
+	const toggleTopCarsModal = () => {
+		setShowAddCarModal(false)
+		setShowOrdersModal(false)
+		setShowLegalEntityModal(false)
+		setShowCarOrdersModal(false)
+		setShowTopCarsModal(!showTopCarsModal)
+		setShowAverageModal(false)
+		setShowClientsModal(false)
+	}
+
+	const toggleAverageModal = () => {
+		setShowAddCarModal(false)
+		setShowOrdersModal(false)
+		setShowLegalEntityModal(false)
+		setShowCarOrdersModal(false)
+		setShowTopCarsModal(false)
+		setShowAverageModal(!showAverageModal)
+		setShowClientsModal(false)
+	}
+
+	const toggleClientsModal = () => {
+		setShowAddCarModal(false)
+		setShowOrdersModal(false)
+		setShowLegalEntityModal(false)
+		setShowCarOrdersModal(false)
+		setShowTopCarsModal(false)
+		setShowAverageModal(false)
+		setShowClientsModal(!showClientsModal)
 	}
 
 	async function handleAddCar(event) {
@@ -72,189 +152,36 @@ function AdminPanel() {
 	}
 
 	return (
-		<div className='admin-buttons'>
-			<button onClick={toggleModal}>Добавить машину</button>
+		<div>
+			<div className='admin-buttons'>
+				<button onClick={toggleAddCarModal}>Добавить машину</button>
+				<button onClick={toggleOrdersModal}>Заказы</button>
+				<button onClick={toggleLegalEntityModal}>Перечень юр.лиц</button>
+				<button onClick={toggleCarOrdersModal}>
+					Перечень с определенной машиной
+				</button>
+				<button onClick={toggleTopCarsModal}>Самые продаваемые машины</button>
+				<button onClick={toggleAverageModal}>Средние продажи</button>
+				<button onClick={toggleClientsModal}>Клиенты</button>
+			</div>
 
-			{showModal && (
-				<div className='add-car-modal'>
-					<form>
-						<input
-							type='text'
-							name='name'
-							onChange={handleInputChange}
-							placeholder='Название'
-							className={getFieldClass('name')}
-						/>
-						<select
-							name='car_brand_id'
-							className={getFieldClass('car_brand_id')}
-							onChange={handleInputChange}
-							value={newCar.car_brand_id || '1'}
-						>
-							<option value='1'>Франция</option>
-							<option value='2'>Германия</option>
-							<option value='3'>Швеция</option>
-							<option value='4'>Россия</option>
-							<option value='5'>Америка</option>
-						</select>
-						<input
-							type='number'
-							name='price'
-							onChange={handleInputChange}
-							placeholder='Стоимость'
-							step='0.01'
-							className={getFieldClass('price')}
-						/>
-						<select
-							name='currency_id'
-							className={getFieldClass('currency_id')}
-							onChange={handleInputChange}
-						>
-							<option value='1'>USD</option>
-							<option value='2'>EUR</option>
-							<option value='3'>RUB</option>
-							<option value='4'>BYN</option>
-						</select>
-						<select
-							name='body_type_id'
-							className={getFieldClass('body_type_id')}
-							onChange={handleInputChange}
-						>
-							<option value='1'>Седан</option>
-							<option value='2'>Хэтчбек</option>
-							<option value='3'>Купе</option>
-							<option value='4'>Лифтбэк</option>
-							<option value='5'>Универсал</option>
-						</select>
-						<select
-							name='gear_type_id'
-							className={getFieldClass('gear_type_id')}
-							onChange={handleInputChange}
-						>
-							<option value='1'>Автоматическая</option>
-							<option value='2'>Механическая</option>
-							<option value='3'>Вариатор</option>
-						</select>
-						<input
-							type='number'
-							name='engine_capacity'
-							onChange={handleInputChange}
-							placeholder='Объем двигателя'
-							step='0.01'
-							className={getFieldClass('engine_capacity')}
-						/>
-						<input
-							type='number'
-							name='cylinder_count'
-							onChange={handleInputChange}
-							placeholder='Количество цилиндров'
-							step='1'
-							className={getFieldClass('cylinder_count')}
-						/>
-						<input
-							type='number'
-							name='engine_power'
-							onChange={handleInputChange}
-							placeholder='Мощность двигателя'
-							step='1'
-							className={getFieldClass('engine_power')}
-						/>
-						<input
-							type='number'
-							name='torque'
-							onChange={handleInputChange}
-							placeholder='Крутящий момент'
-							step='0.01'
-							className={getFieldClass('torque')}
-						/>
-						<input
-							type='number'
-							name='max_speed'
-							onChange={handleInputChange}
-							placeholder='Максимальная скорость'
-							step='1'
-							className={getFieldClass('max_speed')}
-						/>
-						<input
-							type='number'
-							name='acceleration_time'
-							onChange={handleInputChange}
-							placeholder='Скорость разгона'
-							step='0.01'
-							className={getFieldClass('acceleration_time')}
-						/>
-						<input
-							type='datetime-local'
-							name='production_date'
-							onChange={handleInputChange}
-							placeholder='Дата производства'
-							className={getFieldClass('production_date')}
-						/>
-						<input
-							type='number'
-							name='length'
-							onChange={handleInputChange}
-							placeholder='Длина'
-							step='0.01'
-							className={getFieldClass('length')}
-						/>
-						<input
-							type='number'
-							name='width'
-							onChange={handleInputChange}
-							placeholder='Ширина'
-							step='0.01'
-							className={getFieldClass('width')}
-						/>
-						<input
-							type='number'
-							name='height'
-							onChange={handleInputChange}
-							placeholder='Высота'
-							step='0.01'
-							className={getFieldClass('height')}
-						/>
-						<input
-							type='number'
-							name='track_fuel_consumption'
-							onChange={handleInputChange}
-							placeholder='Расход по трассе'
-							step='0.01'
-							className={getFieldClass('track_fuel_consumption')}
-						/>
-						<input
-							type='number'
-							name='city_fuel_consumption'
-							onChange={handleInputChange}
-							placeholder='Расход по городу'
-							step='0.01'
-							className={getFieldClass('city_fuel_consumption')}
-						/>
-						<select
-							name='fuel_type_id'
-							className={getFieldClass('fuel_type_id')}
-							onChange={handleInputChange}
-						>
-							<option value='1'>Бензин</option>
-							<option value='2'>Дизель</option>
-							<option value='3'>Электричество</option>
-							<option value='4'>Газ</option>
-						</select>
-						<select
-							name='equipment_type_id'
-							className={getFieldClass('equipment_type_id')}
-							onChange={handleInputChange}
-						>
-							<option value='1'>Базовая</option>
-							<option value='2'>Средняя</option>
-							<option value='3'>Максимальная</option>
-						</select>
-						<button onClick={handleAddCar} disabled={!areAllFieldsFilled()}>
-							Добавить
-						</button>
-					</form>
-				</div>
-			)}
+			<div className='modal'>
+				{showAddCarModal && (
+					<AddCarModal
+						getFieldClass={getFieldClass}
+						areAllFieldsFilled={areAllFieldsFilled}
+						handleInputChange={handleInputChange}
+						handleAddCar={handleAddCar}
+					/>
+				)}
+
+				{showOrdersModal && <OrdersModal />}
+				{showLegalEntityModal && <LegalEntityModal />}
+				{showCarOrdersModal && <CarOrdersModal />}
+				{showTopCarsModal && <TopCarsModal />}
+				{showAverageModal && <AverageModal />}
+				{showClientsModal && <ClientsModal />}
+			</div>
 		</div>
 	)
 }

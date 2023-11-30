@@ -58,8 +58,8 @@ function AppContent() {
 								<Route path='/' element={<Navigate to='/dashboard' />} />
 								<Route path='/car/:carId' element={<CarDetails />} />
 								<Route path='/dashboard' element={<CarCatalog />} />
-								<Route path='*' element={<NotFoundPage />} />
 								<Route path='/admin' element={<AdminPanel />} />
+								<Route path='*' element={<NotFoundPage />} />
 							</Routes>
 						</div>
 					</div>

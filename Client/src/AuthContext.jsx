@@ -33,7 +33,6 @@ const AuthProvider = ({ children }) => {
 				localStorage.removeItem('token')
 				sessionStorage.removeItem('token')
 			}
-			console.log(user)
 		}
 	}
 	

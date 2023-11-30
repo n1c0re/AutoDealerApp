@@ -8,6 +8,9 @@ import loginRouter from './routes/login.js'
 import tokenRouter from './routes/tokenValidate.js'
 import {orderRouter} from './routes/order.js'
 import clientOrderRouter from './routes/clientOrder.js'
+import supplierRouter from './routes/supplier.js'
+import agreementRouter from './routes/agreement.js'
+import queriesRouter from './routes/queries.js'
 
 const app = express()
 const port = process.env.SERVER_PORT || 4000
@@ -25,6 +28,11 @@ app.use('/api/validateToken', tokenRouter)
 
 app.use('/api/orders', orderRouter)
 app.use('/api/clientZakaz', clientOrderRouter)
+
+app.use('/api/suppliers', supplierRouter)
+app.use('/api/agreement', agreementRouter)
+
+app.use('/api/queries', queriesRouter)
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`)

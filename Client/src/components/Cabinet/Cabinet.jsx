@@ -2,13 +2,12 @@
 import axios from 'axios'
 import './Cabinet.css'
 import { AuthContext } from '../../AuthContext'
-import ClientOrdersTile from '../ClientOrdersTile/ClientOrdersTile'
 import OrdersTile from '../OrdersTile/OrdersTile'
 
 function Cabinet() {
 	const { loggedInUser } = useContext(AuthContext)
 
-	const [orders, setorders] = useState([])
+	const [orders, setOrders] = useState([])
 
 	const getClientOrders = async () => {
 		try {
@@ -20,7 +19,7 @@ function Cabinet() {
 					},
 				}
 			)
-			setorders(response.data)
+			setOrders(response.data)
 		} catch (error) {
 			console.error('Error:', error)
 		}
@@ -29,7 +28,7 @@ function Cabinet() {
 	const getOrders = async () => {
 		try {
 			const response = await axios.get('http://localhost:4000/api/orders/')
-			setorders(response.data)
+			setOrders(response.data)
 		} catch (error) {
 			console.error('Error:', error)
 		}
@@ -42,23 +41,11 @@ function Cabinet() {
 	console.log(orders)
 	return (
 		<div>
-			{loggedInUser.user_type == 'Пользователь' ? (
-				<div className='orders-list'>
-					{orders.map(order => (
-						<ClientOrdersTile
-						order={order}
-						/>
-					))}
-				</div>
-			) : (
-				<div>
-					{orders.map(order => (
-						<OrdersTile
-							order={order}
-						/>
-					))}
-				</div>
-			)}
+			<div className='orders-list'>
+				{orders.map(order => (
+					<OrdersTile order={order} />
+				))}
+			</div>
 		</div>
 	)
 }

@@ -1,9 +1,10 @@
-﻿.admin-buttons {
+﻿.clients-modal {
     display: flex;
-        flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
 }
 
-.button {
+.tile {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin: 10px;
